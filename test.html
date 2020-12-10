@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+window.onload = function() {
+
+var dataPoints = [];
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2",
+	title: {
+		text: "Daily CO@missions Data"
+	},
+	axisY: {
+		title: "Units",
+		titleFontSize: 24
+	},
+	data: [{
+		type: "column",
+		yValueFormatString: "#,### Units",
+		dataPoints: dataPoints
+	}]
+});
+
+function addData(data) {
+	// for (var i = 0; i < data.length; i++) {
+		dataPoints.push({
+			x: data.count,
+			y: data.co2
+		});
+	// }
+	chart.render();
+
+}
+
+fetch('http://localhost:2244/newData')
+  .then((response) => {
+      return response.json();
+  })
+  .then((res) => {
+    // demo = document.getElementById('demo');
+	// demo.innerText = "No. of searches= " + res.count+", "+"CO2 amount = "+ res.co2 + "gm"
+	addData(res);
+  });
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
